@@ -44,7 +44,6 @@ using namespace std;
 #define rep(i, x) for (int i = 0, i##_ = (x); i < i##_; ++i)
 #define rap(i, x) for (auto &i : (x))
 #define seg(t) (t).begin(), (t).end()
-#define rseg(t) (t).rbegin(), (t).rend()
 #define sz(x) (int)(x).size()
 #define eb emplace_back
 #define ep emplace
@@ -312,7 +311,40 @@ int Ma = 1e6,
 		inf = 0x3f3f3f3f, mod = 1e9 + 7;
 
 void solve() {
-	;
+	int n, k; cin >> n >> k;
+	if (k == n - 1) {
+		if (n == 4)
+			cout << "-1" << endl;
+		else {
+			/*int p = n - 1, c = (n + 1) >> 1, cc = c + 1, ccc = p - 1;
+				for (int i = 1; i < n / 2; i++) if (i != cc and (i ^ p) != cc and
+				i != c and (i ^ p) != c and
+				i != ccc and (i ^ p) != ccc) {
+				cout << i << ' ' << (i ^ p) << endl;
+				}
+				cout << p << ' ' << c << endl;
+				cout << cc << ' ' << ccc << endl;
+				cout << (p ^ c) << ' ' << 0 << endl;
+				cout << (cc ^ p) << ' ' << (ccc ^ p) << endl;*/
+			int p = n - 1;
+			for (int i = 0; i < n / 2; i++) if (__builtin_popcount(i) != 1
+					                                and __builtin_popcount(p ^ i) != 1) {
+				cout << i << ' ' << (i ^ p) << endl;
+			}
+			for (int i = 1; i < n; i <<= 1) {
+				int c = (p ^ (i << 1));
+				if (c > n) c = p - 1;
+				cout << i << ' ' << c << endl;
+			}
+		}
+	} else {
+		int p = n - 1;
+		for (int i = 1; i < n / 2; i++) if (i != k and (i ^ p) != k) {
+			cout << i << ' ' << (i ^ p) << endl;
+		}
+		cout << p << ' ' << k << endl;
+		if (k != 0) cout << 0 << ' ' << (k ^ p) << endl;
+	}
 }
 
 signed main() {

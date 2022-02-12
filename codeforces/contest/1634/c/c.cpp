@@ -44,7 +44,6 @@ using namespace std;
 #define rep(i, x) for (int i = 0, i##_ = (x); i < i##_; ++i)
 #define rap(i, x) for (auto &i : (x))
 #define seg(t) (t).begin(), (t).end()
-#define rseg(t) (t).rbegin(), (t).rend()
 #define sz(x) (int)(x).size()
 #define eb emplace_back
 #define ep emplace
@@ -312,7 +311,36 @@ int Ma = 1e6,
 		inf = 0x3f3f3f3f, mod = 1e9 + 7;
 
 void solve() {
-	;
+	int n, k; cin >> n >> k;
+	cout << "YES" << endl;
+	vector<vector<int>> g(k);
+	rep (i, n) rep (j, k)
+		if (i + j) g[j].eb(i * k + j);
+	g[0].eb(n * k);
+	vector<pa> res;
+	for (int j = 1; j <= k / 2; j++) while (g[j].size()) {
+		pa t;
+		t.F = g[j].back();
+		g[j].pop_back(); 
+		t.S = g[k - j].back();
+		g[k - j].pop_back();
+		res.eb(t);
+	}
+	if (k & 1) {
+		if (k == 1 or res.size() % ((k - 1) / 2) == 0) {
+			auto f = res.begin();
+			for (int i = 0; i < n; i++) {
+				rep (j, (k - 1) / 2) cout << f->F << ' ' << f->S << ' ', ++f;
+				cout << g[0][i] << endl;
+			}
+		} else cout << "NO" << endl;
+	} else {
+		if (res.size() % (k / 2) == 0) {
+			auto f = res.begin();
+			rep (i, n - 1) { rep (j, k / 2) cout << f->F << ' ' << f->S << ' ', ++f; cout << endl; }
+			cout << g[0] << endl;
+		} else cout << "NO" << endl; 
+	}
 }
 
 signed main() {

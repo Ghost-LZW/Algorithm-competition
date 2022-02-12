@@ -44,7 +44,6 @@ using namespace std;
 #define rep(i, x) for (int i = 0, i##_ = (x); i < i##_; ++i)
 #define rap(i, x) for (auto &i : (x))
 #define seg(t) (t).begin(), (t).end()
-#define rseg(t) (t).rbegin(), (t).rend()
 #define sz(x) (int)(x).size()
 #define eb emplace_back
 #define ep emplace
@@ -308,11 +307,56 @@ constexpr
 #else
 const
 #endif
-int Ma = 1e6,
+int Ma = 1e6 + 100,
 		inf = 0x3f3f3f3f, mod = 1e9 + 7;
 
+// from boost (functional/hash):
+// see http://www.boost.org/doc/libs/1_35_0/doc/html/hash/combine.html template
+template <typename T>
+inline void hash_combine(std::size_t &seed, const T &val) {
+    seed ^= std::hash<T>()(val) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+}
+// auxiliary generic functions to create a hash value using a seed
+template <typename T> inline void hash_val(std::size_t &seed, const T &val) {
+    hash_combine(seed, val);
+}
+template <typename T, typename... Types>
+inline void hash_val(std::size_t &seed, const T &val, const Types &... args) {
+    hash_combine(seed, val);
+    hash_val(seed, args...);
+}
+
+template <typename... Types>
+inline std::size_t hash_val(const Types &... args) {
+    std::size_t seed = 0;
+    hash_val(seed, args...);
+    return seed;
+}
+
+struct pair_hash {
+    template <class T1, class T2>
+    std::size_t operator()(const std::pair<T1, T2> &p) const {
+        return hash_val(p.first, p.second);
+    }
+};
+
 void solve() {
-	;
+	int a, b; cin >> a >> b;
+	queue<tuple<int, int, int>> q;
+  q.ep(a, b, 0);
+	cc_hash_table<pair<int, int>, null_type, pair_hash> vis;
+	while (!q.empty()) {
+		auto [a, b, c] = q.front(); q.pop();
+		debug(a, b, c);
+		if (a == b) {
+			cout << c << endl;
+			return ;
+		}
+		if (vis.find(mkp(a + 1, b)) == vis.end()) q.ep(a + 1, b, c + 1), vis.insert(mkp(a + 1, b));
+		if (vis.find(mkp(a, b + 1)) == vis.end()) q.ep(a, b + 1, c + 1), vis.insert(mkp(a, b + 1));
+		if (vis.find(mkp(b | a, b)) == vis.end()) q.ep(a | b, b, c + 1), vis.insert(mkp(a | b, b));
+	}
+	assert(false);
 }
 
 signed main() {

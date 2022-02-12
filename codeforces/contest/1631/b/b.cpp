@@ -44,7 +44,6 @@ using namespace std;
 #define rep(i, x) for (int i = 0, i##_ = (x); i < i##_; ++i)
 #define rap(i, x) for (auto &i : (x))
 #define seg(t) (t).begin(), (t).end()
-#define rseg(t) (t).rbegin(), (t).rend()
 #define sz(x) (int)(x).size()
 #define eb emplace_back
 #define ep emplace
@@ -312,7 +311,15 @@ int Ma = 1e6,
 		inf = 0x3f3f3f3f, mod = 1e9 + 7;
 
 void solve() {
-	;
+	int n; cin >> n;
+	vi a(n);
+	rap (i, a) cin >> i;
+	int s{1}, ans{0};
+	for (int i = n - 2; i >= 0;) {
+		if (a[i] != a[n - 1]) i -= s, s *= 2, ++ans;
+		else --i, ++s;
+	}
+	cout << ans << endl;
 }
 
 signed main() {

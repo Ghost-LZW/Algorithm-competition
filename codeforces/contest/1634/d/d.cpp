@@ -39,12 +39,10 @@ using namespace __gnu_cxx;
 #endif
 using namespace std;
 
-#define endl '\n'
 #define fep(i, b, e) for (int i = (b), i##_ = (e); i < i##_; ++i)
 #define rep(i, x) for (int i = 0, i##_ = (x); i < i##_; ++i)
 #define rap(i, x) for (auto &i : (x))
 #define seg(t) (t).begin(), (t).end()
-#define rseg(t) (t).rbegin(), (t).rend()
 #define sz(x) (int)(x).size()
 #define eb emplace_back
 #define ep emplace
@@ -311,8 +309,28 @@ const
 int Ma = 1e6,
 		inf = 0x3f3f3f3f, mod = 1e9 + 7;
 
+int querry(int a, int b, int c) {
+	cout << "? " << a + 1 << ' ' << b + 1 << ' ' << c + 1 << endl;
+	cin >> a;
+	return a;
+}
+
 void solve() {
-	;
+	int n; cin >> n;
+	int i{0}, j{1}, k{2};
+	int d = querry(i, j, k);
+	fep (l, 3, n) {
+		int d1 = querry(i, j, l), d2 = querry(i, l, k);
+		if (d > d1 and d > d2) continue;
+		cmax(d, max(d1, d2));
+		if (d1 > d2) {
+			k = l;
+		} else j = l;
+	}
+	int l{0}; while (l == i or l == j or l == k) ++l;
+	if (querry(i, j, l) == d) cout << "! " << i + 1 << ' ' << j + 1 << endl;
+	else if (querry(i, l, k) == d) cout << "! " << i + 1 << ' ' << k + 1 << endl;
+	else cout << "! " << j + 1 << ' ' << k + 1 << endl;
 }
 
 signed main() {
